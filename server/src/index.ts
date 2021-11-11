@@ -37,11 +37,11 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    post: (_, { id }) => posts.find((post) => post.id === id),
+    post: (_: any, { id }: any) => posts.find((post) => post.id === id),
     posts: () => posts,
   },
   Mutation: {
-    addPost(_, { title, description }) {
+    addPost(_: any, { title, description }: any) {
       const post = {
         id: `${posts.length + 1}`,
         title,
@@ -50,14 +50,14 @@ const resolvers = {
       posts.push(post);
       return post;
     },
-    deletePost(_, { id }) {
+    deletePost(_: any, { id }: any) {
       posts = posts.filter((post) => post.id !== id);
       return id;
     },
   },
 };
 
-async function startApolloServer(typeDefs, resolvers) {
+async function startApolloServer(typeDefs: any, resolvers: any) {
   const app = express();
   // app.use(cors());
   const corsOptions = {
