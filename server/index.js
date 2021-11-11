@@ -4,14 +4,14 @@ const express = require("express");
 const http = require("http");
 const cors = require("cors");
 
-const posts = [
+let posts = [
   {
-    id: 1,
+    id: "1",
     title: "Post 1",
     description: "description 1",
   },
   {
-    id: 2,
+    id: "2",
     title: "Post 2",
     description: "desction 2",
   },
@@ -25,13 +25,35 @@ const typeDefs = gql`
   }
 
   type Query {
+    post(id: ID!): Post
     posts: [Post]
+  }
+
+  type Mutation {
+    addPost(title: String!, description: String!): Post
+    deletePost(id: ID!): ID
   }
 `;
 
 const resolvers = {
   Query: {
+    post: (_, { id }) => posts.find((post) => post.id === id),
     posts: () => posts,
+  },
+  Mutation: {
+    addPost(_, { title, description }) {
+      const post = {
+        id: `${posts.length + 1}`,
+        title,
+        description,
+      };
+      posts.push(post);
+      return post;
+    },
+    deletePost(_, { id }) {
+      posts = posts.filter((post) => post.id !== id);
+      return id;
+    },
   },
 };
 
